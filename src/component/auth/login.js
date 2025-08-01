@@ -21,7 +21,7 @@ const Login = () => {
     e.preventDefault();
     setError('');
     try {
-      const res = await axios.post('http://localhost:8080/api/auth/login', { username, password });
+      const res = await axios.post('https://resignation-backend.onrender.com/api/auth/login', { username, password });
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('role', username === 'admin' ? 'admin' : 'employee');
       navigate("/")

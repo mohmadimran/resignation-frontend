@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:3001/api',
+  baseURL: 'https://resignation-backend.onrender.com/api',
 });
 
 // Attach token for each request
