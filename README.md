@@ -32,7 +32,4 @@ It enables **employees** to submit resignations and fill exit questionnaires, wh
 | **Authentication** | JWT (JSON Web Token) |
 | **Testing (optional)** | Cypress (for E2E testing) |
 
----
-
-## 📂 Project Structure
 
