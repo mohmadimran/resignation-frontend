@@ -1,62 +1,78 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React, { useState } from "react";
 import {
   TextField,
   Button,
-  Container,
   Typography,
-  Box,
   Paper,
-  Alert
-} from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+  Box,
+} from "@mui/material";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Login = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [formData, setFormData] = useState({ username: "", password: "" });
+  const [message, setMessage] = useState("");
   const navigate = useNavigate();
+
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
+    setMessage("");
+
     try {
-      const res = await axios.post('https://resignation-backend.onrender.com/api/auth/login', { username, password });
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('role', username === 'admin' ? 'admin' : 'employee');
-      navigate("/")
+      const response = await axios.post("/api/auth/login", formData);
+      const { token, user } = response.data;
+
+      // Save authentication data
+      localStorage.setItem("token", token);
+      localStorage.setItem("role", user.role);
+      localStorage.setItem("username", user.username);
+
+      setMessage("Login successful!");
+
+      if (user.role === "employee") {
+        navigate("/employee-dashboard");
+      } else if (user.role === "HR") {
+        navigate("/hr-dashboard");
+      } else {
+        navigate("/"); 
+      }
     } catch (err) {
-      setError('Login failed. Please check credentials.');
+      setMessage(err.response?.data?.message || "Login failed");
     }
   };
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ p: 4, mt: 5 }}>
-        <Typography variant="h5" align="center" gutterBottom>
-          {username === 'admin' ? 'Admin Login' : 'Employee Login'}
+    <Box display="flex" justifyContent="center" mt={5}>
+      <Paper elevation={3} sx={{ padding: 4, width: 400 }}>
+        <Typography variant="h5" gutterBottom>
+          Login
         </Typography>
-        {error && <Alert severity="error">{error}</Alert>}
-        <Box component="form" onSubmit={handleSubmit}>
+
+        <form onSubmit={handleSubmit}>
           <TextField
             label="Username"
-            variant="outlined"
+            name="username"
             fullWidth
-            required
             margin="normal"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            required
+            value={formData.username}
+            onChange={handleChange}
           />
           <TextField
             label="Password"
+            name="password"
             type="password"
-            variant="outlined"
             fullWidth
-            required
             margin="normal"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
+            required
+            value={formData.password}
+            onChange={handleChange}
           />
+
           <Button
             type="submit"
             variant="contained"
@@ -66,9 +82,18 @@ const Login = () => {
           >
             Login
           </Button>
-        </Box>
+        </form>
+
+        {message && (
+          <Typography
+            sx={{ mt: 2 }}
+            color={message.includes("successful") ? "green" : "error"}
+          >
+            {message}
+          </Typography>
+        )}
       </Paper>
-    </Container>
+    </Box>
   );
 };
 

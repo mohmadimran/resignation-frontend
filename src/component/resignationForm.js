@@ -1,78 +1,115 @@
-import React, { useState } from 'react';
-import {
-  TextField,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-  Box,
-  Alert,
-} from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { TextField, Button, Box, Typography } from '@mui/material';
 import axios from 'axios';
 
-const ResignationForm = ({ token }) => {
+const ResignationForm = ({ onSubmitted }) => {
+  const [name,setName] = useState('')
+  const [email,setEmail] = useState('')
+  const [role,setRole] = useState('')
+  const [reason, setReason] = useState('');
   const [lwd, setLwd] = useState('');
-  const [successMessage, setSuccessMessage] = useState('');
-  const [error, setError] = useState('');
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('token');
+
+  useEffect(() => {
+    // Fetch logged-in user info
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get('/api/user/me', {
+          headers: { Authorization: token },
+        });
+        setName(res.data.data?.username);
+        setEmail(res.data.data?.email)
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError('');
-    setSuccessMessage('');
-
     try {
-      const res = await axios.post(
+      await axios.post(
         '/api/user/resign',
-        { lwd },
         {
-          headers: {
-            Authorization: token,
-          },
-        }
+          name:name,
+          email:email,
+          jobRole:role,
+          reason:reason,
+          lwd:lwd, 
+        },
+        { headers: { Authorization: token } }
       );
-
-      if (res.data?.data?.resignation?._id) {
-        setSuccessMessage('Resignation submitted successfully.');
-        setLwd('');
-      }
+      onSubmitted();
     } catch (err) {
-      setError('Failed to submit resignation.');
+      alert(err.response?.data?.message || 'Failed to submit resignation');
     }
   };
 
+  if (loading) return <Typography>Loading...</Typography>;
+
   return (
-    <Card sx={{ maxWidth: 400, margin: 'auto', mt: 8 }}>
-      <CardContent>
-        <Typography variant="h5" gutterBottom>
-          Submit Resignation
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit}>
-          <TextField
-            type="date"
-            label="Last Working Day"
-            value={lwd}
-            onChange={(e) => setLwd(e.target.value)}
-            fullWidth
-            required
-            InputLabelProps={{ shrink: true }}
-            sx={{ mb: 2 }}
-          />
-          <Button variant="contained" color="primary" fullWidth type="submit">
-            Submit
-          </Button>
-        </Box>
-        {successMessage && (
-          <Alert severity="success" sx={{ mt: 2 }}>
-            {successMessage}
-          </Alert>
-        )}
-        {error && (
-          <Alert severity="error" sx={{ mt: 2 }}>
-            {error}
-          </Alert>
-        )}
-      </CardContent>
-    </Card>
+    <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto' }}>
+      <Typography variant="h6" gutterBottom>Submit Resignation</Typography>
+
+      <TextField
+        label="Name"
+        value={name}
+              onChange={(e) => setName(e.target.value)}
+
+        fullWidth
+        margin="normal"
+        InputProps={{ readOnly: true }}
+      />
+
+      <TextField
+        label="Email"
+        value={email}
+              onChange={(e) => setEmail(e.target.value)}
+
+        fullWidth
+        margin="normal"
+        InputProps={{ readOnly: true }}
+      />
+
+      <TextField
+        label="Job Role"
+        value={role}
+      onChange={(e) => setRole(e.target.value)}
+
+        fullWidth
+        margin="normal"
+      />
+
+      <TextField
+        label="Reason"
+        value={reason}
+        onChange={(e) => setReason(e.target.value)}
+        fullWidth
+        margin="normal"
+        multiline
+        required
+      />
+
+      <TextField
+        label="Last Working Day"
+        type="date"
+        value={lwd}
+        onChange={(e) => setLwd(e.target.value)}
+        fullWidth
+        margin="normal"
+        InputLabelProps={{ shrink: true }}
+        required
+      />
+
+      <Button type="submit" variant="contained" fullWidth sx={{ mt: 2 }}>
+        Submit Resignation
+      </Button>
+    </Box>
   );
 };
 

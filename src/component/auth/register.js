@@ -1,13 +1,12 @@
-// src/components/Register.jsx
 import React, { useState } from 'react';
-import { TextField, Button, Typography, Paper, Box } from '@mui/material';
+import { TextField, Button, Typography, Paper, Box, MenuItem } from '@mui/material';
 import axios from 'axios';
-import {useNavigate} from "react-router-dom"
+import { useNavigate } from 'react-router-dom';
 
 const Register = () => {
-  const [formData, setFormData] = useState({ username: '', password: '' });
+  const [formData, setFormData] = useState({ username: '',email:'', password: '', role: '' });
   const [message, setMessage] = useState('');
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -16,9 +15,9 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('https://resignation-backend.onrender.com/api/auth/register', formData);
+      const response = await axios.post('/api/auth/register', formData);
       setMessage(response.data.message);
-      navigate("/login")
+      navigate('/login');
     } catch (err) {
       setMessage(err.response?.data?.message || 'Registration failed');
     }
@@ -41,6 +40,16 @@ const Register = () => {
             onChange={handleChange}
           />
           <TextField
+            label="email"
+            name="email"
+            type='email'
+            fullWidth
+            margin="normal"
+            required
+            value={formData.email}
+            onChange={handleChange}
+          />
+          <TextField
             label="Password"
             name="password"
             type="password"
@@ -50,10 +59,33 @@ const Register = () => {
             value={formData.password}
             onChange={handleChange}
           />
-          <Button type="submit" variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
+          {/* New Role Field */}
+          <TextField
+            select
+            label="Role"
+            name="role"
+            fullWidth
+            margin="normal"
+            required
+            value={formData.role}
+            onChange={handleChange}
+            helperText="Please select your role"
+          >
+            <MenuItem value="employee">Employee</MenuItem>
+            <MenuItem value="HR">HR</MenuItem>
+          </TextField>
+
+          <Button
+            type="submit"
+            variant="contained"
+            color="primary"
+            fullWidth
+            sx={{ mt: 2 }}
+          >
             Register
           </Button>
         </form>
+
         {message && (
           <Typography color="secondary" sx={{ mt: 2 }}>
             {message}

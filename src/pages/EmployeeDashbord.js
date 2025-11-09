@@ -1,29 +1,52 @@
-import React from 'react';
-import { Button, Typography, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Typography, Box, CircularProgress } from '@mui/material';
+import ResignationForm from "../component/ResignationForm";
+import EmployeeResigStatus from '../component/EmployeeResignationStatus';
+import axios from 'axios';
 
 const EmployeeDashboard = () => {
-  const navigate = useNavigate();
+  const [resignation, setResignation] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const token = localStorage.getItem('token');
+
+  const fetchResignation = async () => {
+    try {
+      const res = await axios.get('/api/user/resign-status', {
+        headers: { Authorization: token },
+      });
+      setResignation(res.data.data || null);
+    } catch (err) {
+      setResignation(null);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchResignation();
+  }, []);
+
+  const handleSubmitted = async () => {
+    // Re-fetch after form submit to show latest status
+    await fetchResignation();
+  };
+
+  if (loading) return <CircularProgress />;
 
   return (
     <Box p={4}>
       <Typography variant="h4" gutterBottom>
-        This is Employee Dashboard
+        Employee Dashboard
       </Typography>
-      <Typography variant="body1" gutterBottom>
-        Welcome! You can submit your resignation or complete the exit questionnaire.
-      </Typography>
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={() => navigate('/employee/exit-form')}
-        sx={{ mt: 2 }}
-      >
-        Exit Questionnaire
-      </Button>
+
+      {/* If resignation found, show status, else show form */}
+      {resignation ? (
+        <EmployeeResigStatus data={resignation} />
+      ) : (
+        <ResignationForm onSubmitted={handleSubmitted} />
+      )}
     </Box>
   );
 };
 
 export default EmployeeDashboard;
-
