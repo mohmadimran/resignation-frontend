@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { Typography, Box, CircularProgress } from '@mui/material';
 import ResignationForm from "../component/ResignationForm";
 import EmployeeResigStatus from '../component/EmployeeResignationStatus';
-import axios from 'axios';
+import {resignationStatus} from "../services/api"
 
 const EmployeeDashboard = () => {
   const [resignation, setResignation] = useState(null);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem('token');
 
   const fetchResignation = async () => {
     try {
-      const res = await axios.get('/api/user/resign-status', {
-        headers: { Authorization: token },
-      });
+      const res = await resignationStatus();
       setResignation(res.data.data || null);
     } catch (err) {
       setResignation(null);

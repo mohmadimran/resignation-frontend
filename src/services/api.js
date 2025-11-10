@@ -21,8 +21,10 @@ export const registerUser = (userData) => API.post('/auth/register', userData);
 export const loginUser = (userData) => API.post('/auth/login', userData);
 
 // Employee
+export const getUserData = () => API.get('/user/me');
+
 export const submitResignation = (data) => API.post('/user/resign', data);
-export const submitExitResponses = (data) => API.post('/user/responses', data);
+export const resignationStatus = () => API.get('/user/resign-status');
 
 // Admin
 export const getAllResignations = () => API.get('/admin/resignations');

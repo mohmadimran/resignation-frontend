@@ -6,9 +6,8 @@ import {
   Paper,
   Box,
 } from "@mui/material";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import {loginUser} from "../../services/api"
 const Login = () => {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [message, setMessage] = useState("");
@@ -23,7 +22,7 @@ const Login = () => {
     setMessage("");
 
     try {
-      const response = await axios.post("/api/auth/login", formData);
+      const response = await loginUser(formData);
       const { token, user } = response.data;
 
       // Save authentication data

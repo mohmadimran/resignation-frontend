@@ -11,8 +11,7 @@ import AdminResignationList from './component/admin/adminResignationList';
 const App = () => {
   const token = localStorage.getItem('token');
   const role = localStorage.getItem('role');
-console.log("token",token)
-console.log("role",role)
+
   return (
     <>
       <Navbar />

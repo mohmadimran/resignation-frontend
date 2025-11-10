@@ -10,7 +10,7 @@ import {
   Divider,
   Alert,
 } from '@mui/material';
-import axios from 'axios';
+// import {getAllResignations,} from "../services/api"
 
 const AdminDashboard = () => {
   const [resignations, setResignations] = useState([]);
@@ -22,10 +22,7 @@ const AdminDashboard = () => {
   useEffect(() => {
     const fetchResignations = async () => {
       try {
-        const res = await axios.get('/api/admin/resignations', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        console.log("user reuest response list",res.data?.data )
+        const res = await getAllResignations();
         setResignations(res.data?.data || []);
       } catch (err) {
         console.error('Error fetching resignations:', err);
@@ -41,7 +38,7 @@ const AdminDashboard = () => {
   const handleDecision = async (id, approved, lwd) => {
     try {
       await axios.put(
-        '/api/admin/conclude_resignation',
+        'https://resignation-backend.onrender.com/api/admin/conclude_resignation',
         { resignationId: id, approved, lwd },
         { headers: { Authorization: `Bearer ${token}` } }
       );

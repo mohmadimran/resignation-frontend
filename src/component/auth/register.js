@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { TextField, Button, Typography, Paper, Box, MenuItem } from '@mui/material';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-
+import {registerUser} from "../../services/api"
 const Register = () => {
   const [formData, setFormData] = useState({ username: '',email:'', password: '', role: '' });
   const [message, setMessage] = useState('');
@@ -15,9 +14,16 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/api/auth/register', formData);
-      setMessage(response.data.message);
+      // const response = await axios.post('/api/auth/register', formData)
+      // ;
+      // const { data } = await registerUser(formData);
+
+      // toast.success(data.message || 'Registration successful!');
+      // navigate('/login');
+      const {data} = await registerUser(formData)
+      setMessage(data.message);
       navigate('/login');
+
     } catch (err) {
       setMessage(err.response?.data?.message || 'Registration failed');
     }

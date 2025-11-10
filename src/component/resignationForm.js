@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
-import axios from 'axios';
+import {getUserData,submitResignation} from "../services/api";
 
 const ResignationForm = ({ onSubmitted }) => {
   const [name,setName] = useState('')
@@ -8,17 +8,13 @@ const ResignationForm = ({ onSubmitted }) => {
   const [role,setRole] = useState('')
   const [reason, setReason] = useState('');
   const [lwd, setLwd] = useState('');
-  const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
-  const token = localStorage.getItem('token');
 
   useEffect(() => {
     // Fetch logged-in user info
     const fetchUser = async () => {
       try {
-        const res = await axios.get('/api/user/me', {
-          headers: { Authorization: token },
-        });
+        const res = await getUserData();
         setName(res.data.data?.username);
         setEmail(res.data.data?.email)
       } catch (err) {
@@ -33,16 +29,14 @@ const ResignationForm = ({ onSubmitted }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(
-        '/api/user/resign',
+      await submitResignation(
         {
           name:name,
           email:email,
           jobRole:role,
           reason:reason,
           lwd:lwd, 
-        },
-        { headers: { Authorization: token } }
+        }
       );
       onSubmitted();
     } catch (err) {
