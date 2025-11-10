@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
-import {getUserData,submitResignation} from "../services/api";
+import { getUserData, submitResignation } from "../services/api";
 
 const ResignationForm = ({ onSubmitted }) => {
-  const [name,setName] = useState('')
-  const [email,setEmail] = useState('')
-  const [role,setRole] = useState('')
+  const [name, setName] = useState('')
+  const [email, setEmail] = useState('')
+  const [role, setRole] = useState('')
   const [reason, setReason] = useState('');
   const [lwd, setLwd] = useState('');
   const [loading, setLoading] = useState(true);
@@ -31,11 +31,11 @@ const ResignationForm = ({ onSubmitted }) => {
     try {
       await submitResignation(
         {
-          name:name,
-          email:email,
-          jobRole:role,
-          reason:reason,
-          lwd:lwd, 
+          name: name,
+          email: email,
+          jobRole: role,
+          reason: reason,
+          lwd: lwd,
         }
       );
       onSubmitted();
@@ -44,7 +44,20 @@ const ResignationForm = ({ onSubmitted }) => {
     }
   };
 
-  if (loading) return <Typography>Loading...</Typography>;
+
+  if (loading)
+    return (
+      <Box
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '100vh',
+        }}
+      >
+        <Typography>Loading...</Typography>
+      </Box>
+    );
 
   return (
     <Box component="form" onSubmit={handleSubmit} sx={{ maxWidth: 400, mx: 'auto' }}>
@@ -53,7 +66,7 @@ const ResignationForm = ({ onSubmitted }) => {
       <TextField
         label="Name"
         value={name}
-              onChange={(e) => setName(e.target.value)}
+        onChange={(e) => setName(e.target.value)}
 
         fullWidth
         margin="normal"
@@ -63,7 +76,7 @@ const ResignationForm = ({ onSubmitted }) => {
       <TextField
         label="Email"
         value={email}
-              onChange={(e) => setEmail(e.target.value)}
+        onChange={(e) => setEmail(e.target.value)}
 
         fullWidth
         margin="normal"
@@ -73,7 +86,7 @@ const ResignationForm = ({ onSubmitted }) => {
       <TextField
         label="Job Role"
         value={role}
-      onChange={(e) => setRole(e.target.value)}
+        onChange={(e) => setRole(e.target.value)}
 
         fullWidth
         margin="normal"

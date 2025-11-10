@@ -28,8 +28,20 @@ const EmployeeDashboard = () => {
     await fetchResignation();
   };
 
-  if (loading) return <CircularProgress />;
-
+if (loading)
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        height: '100vh', 
+      }}
+    >
+      <CircularProgress />
+    </Box>
+  );
+  
   return (
     <Box p={4}>
       <Typography variant="h4" gutterBottom>
