@@ -6,7 +6,7 @@ import Login from "./component/auth/login";
 import EmployeeDashboard from "./pages/EmployeeDashbord";
 import AdminDashboard from "./pages/AdminDashboard";
 import ExitResponses from "./pages/ExitResponse";
-import AdminResignationList from "./component/admin/adminResignationList";
+// import AdminResignationList from "./component/admin/adminResignationList";
 import ProtectedRoute from "./routes/ProtectedRoutes"; 
 
 const App = () => {
@@ -36,14 +36,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
-        <Route
-          path="/hr/approve"
-          element={
-            <ProtectedRoute allowedRoles={["HR"]}>
-              <AdminResignationList />
-            </ProtectedRoute>
-          }
-        />
+       
         <Route
           path="/hr/responses"
           element={
