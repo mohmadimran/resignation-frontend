@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
-import { getUserData, submitResignation } from "../services/api";
+import { getUserData, submitResignation } from "../../services/api";
 
 const ResignationForm = ({ onSubmitted }) => {
   const [name, setName] = useState('')

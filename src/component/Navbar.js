@@ -1,5 +1,5 @@
 import { AppBar, Toolbar, Typography, Button, Box } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -25,13 +25,15 @@ const Navbar = () => {
 
           {token && role === 'employee' && (
             <>
-              <Button color="inherit">Employee Dashboard</Button>
+              <Button color="inherit" component={Link}
+                to="/employee-dashboard">Employee Dashboard</Button>
             </>
           )}
 
           {token && role === 'HR' && (
             <>
-              <Button color="inherit" >HR Dashboard</Button>
+              <Button component={Link}
+                to="/hr-dashboard" color="inherit">HR Dashboard</Button>
             </>
           )}
 

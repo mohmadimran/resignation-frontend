@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Typography, Box, CircularProgress } from '@mui/material';
-import ResignationForm from "../component/ResignationForm";
-import EmployeeResigStatus from '../component/EmployeeResignationStatus';
+import ResignationForm from "../component/resignation/ResignForm";
+import ResignStatus from "../component/resignation/ResignForm"
 import {resignationStatus} from "../services/api"
 
 const EmployeeDashboard = () => {
@@ -50,7 +50,7 @@ if (loading)
 
       {/* If resignation found, show status, else show form */}
       {resignation ? (
-        <EmployeeResigStatus data={resignation} />
+        <ResignStatus data={resignation} />
       ) : (
         <ResignationForm onSubmitted={handleSubmitted} />
       )}
