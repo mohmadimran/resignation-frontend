@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Typography, Box, CircularProgress } from '@mui/material';
+import {Box, CircularProgress } from '@mui/material';
 import ResignationForm from "../component/resignation/ResignForm";
 import ResignStatus from "../component/resignation/ResignStatus"
 import {resignationStatus} from "../services/api"
