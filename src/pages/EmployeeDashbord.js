@@ -44,10 +44,7 @@ if (loading)
   
   return (
     <Box p={4}>
-      <Typography variant="h4" gutterBottom>
-        Employee Dashboard
-      </Typography>
-
+     
       {/* If resignation found, show status, else show form */}
       {resignation ? (
         <ResignStatus data={resignation} />
