@@ -10,7 +10,8 @@ import {
   Divider,
   Alert,
 } from '@mui/material';
-// import {getAllResignations,} from "../services/api"
+import {getAllResignations,} from "../services/api"
+import axios from "axios"
 
 const AdminDashboard = () => {
   const [resignations, setResignations] = useState([]);
